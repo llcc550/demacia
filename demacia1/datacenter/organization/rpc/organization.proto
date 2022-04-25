@@ -1,0 +1,34 @@
+syntax = "proto3";
+
+package organization;
+
+option go_package = "organization";
+
+message IdReply{
+  int64 id = 1;
+}
+
+message OrgInfo{
+  int64 id = 1;
+  string title = 2;
+  int64 org_status = 3;
+  int64 manager_member_id = 4;
+  string manager_member_user_name = 5;
+  string area_title = 6;
+  string true_name = 7;
+  string mobile = 8;
+  string addr = 9;
+  string msg = 10;
+  int64 term_id = 11;
+  int64 province_id = 12;
+  int64 city_id = 13;
+  int64 area_id = 14;
+  int64 agent_id = 15;
+  int64 create_time = 16;
+  string activate_date = 17;
+  string expire_date = 18;
+}
+
+service organization {
+  rpc findOne(IdReply) returns(OrgInfo);
+}

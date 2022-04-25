@@ -1,0 +1,12 @@
+Name: auth-api
+Host: 127.0.0.1
+Port: 2000
+Auth:
+  AccessSecret: 3c9ownbsz1vthfk4
+  RefreshSecret: sqmh60pl3r5zvt19
+MemberRpc:
+  Endpoints:
+    - 124.71.163.192:32003
+UserRpc:
+  Endpoints:
+    - 124.71.163.192:32006

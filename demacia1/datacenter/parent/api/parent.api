@@ -1,0 +1,89 @@
+syntax = "v1"
+info(
+	author: "刘传"
+	date: "2021-12-31"
+	desc: "家长-api"
+)
+type (
+	UrlReq {
+		WebsocketUuid string `json:"websocket_uuid"`
+		Url           string `json:"url"`
+	}
+	InsertRequest {
+		ParentId   int64     `json:"parent_id,optional"`
+		Student    []Student `json:"student"`
+		ParentName string    `json:"parent_name"`
+		Moblie     string    `json:"mobile"`
+		IdNumber   string    `json:"id_number,optional"`
+		Address    string    `json:"address,optional"`
+		Face       string    `json:"face,optional"`
+	}
+	Student {
+		StudentParentId int64 `json:"student_parent_id,optional"`
+		ParentId        int64 `json:"parent_id,optional"`
+		StudentId       int64 `json:"student_id"`
+		ClassId         int64 `json:"class_id"`
+		Relation        int8  `json:"relation"`
+	}
+	IdRequest {
+		ParentId int64 `json:"parent_id"`
+	}
+	IdsRequest {
+		ParentIds []int64 `json:"parent_ids"`
+	}
+	List {
+		ParentId    int64         `json:"parent_id"`
+		ParentName  string        `json:"parent_name"`
+		Mobile      string        `json:"mobile"`
+		StudentInfo []StudentInfo `json:"student_info"`
+		FaceStatus  int8          `json:"face_status"`
+	}
+	StudentInfo {
+		StudentId       int64  `json:"student_id"`
+		StudentName     string `json:"student_name"`
+		StudentUserName string `json:"student_user_name"`
+		ClassName       string `json:"class_name"`
+		Relation        int8   `json:"relation"`
+	}
+	ParentList {
+		List  []List `json:"list"`
+		Count int    `json:"count"`
+	}
+	ListConditionRequest {
+		ClassId     int64  `json:"class_id,optional"`
+		StudentName string `json:"student_name,optional"`
+		ParentName  string `json:"parent_name,optional"`
+		FaceStatus  int8   `json:"face_status,optional"`
+		Page        int    `json:"page,optional"`
+		Limit       int    `json:"limit,optional"`
+	}
+	DetailResponse {
+		ParentId    int64         `json:"parent_id"`
+		StudentInfo []StudentInfo `json:"student_info"`
+		ParentName  string        `json:"parent_name"`
+		Moblie      string        `json:"mobile"`
+		IdNumber    string        `json:"id_number"`
+		Address     string        `json:"address"`
+		Face        string        `json:"face"`
+	}
+)
+
+service parent-api {
+	@handler insertHandler
+	post /api/parent/insert (InsertRequest)
+	
+	@handler updateHandler
+	post /api/parent/update (InsertRequest)
+	
+	@handler deleteHandler
+	post /api/parent/delete (IdsRequest)
+	
+	@handler parentListHandler
+	post /api/parent/page-list (ListConditionRequest) returns(ParentList)
+	
+	@handler parentDetailHandler
+	post /api/parent/detail (IdRequest) returns (DetailResponse)
+	
+	@handler importParents
+	post /api/parent/import (UrlReq)
+}

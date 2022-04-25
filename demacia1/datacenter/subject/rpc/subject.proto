@@ -1,0 +1,20 @@
+syntax = "proto3";
+
+package subject;
+
+option go_package = "subject";
+
+message IdReq{
+  int64 id = 1;
+}
+
+message SubjectInfo{
+  int64 id = 1;
+  string title = 2;
+}
+
+message NullResp {}
+
+service subject {
+  rpc GetSubjectById(IdReq) returns(SubjectInfo);
+}

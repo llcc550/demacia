@@ -1,0 +1,30 @@
+syntax = "v1"
+info(
+	author: "张春葵"
+	date: "2021-12-26"
+	desc: "auth-api"
+)
+type (
+	Token {
+		AccessToken   string `json:"access_token"`
+		AccessExpire  int64  `json:"access_expire"`
+		RefreshToken  string `json:"refresh_token"`
+		RefreshExpire int64  `json:"refresh_expire"`
+		RefreshAfter  int64  `json:"refresh_after"`
+	}
+	LoginRequest {
+		UserName string `json:"user_name"`
+		Password string `json:"password"`
+	}
+	TokenResponse {
+		Token Token `json:"token"`
+	}
+)
+
+service auth-api {
+	@handler memberLogin
+	post /api/auth/member/login (LoginRequest) returns (TokenResponse)
+	
+	@handler userLogin
+	post /api/auth/user/login (LoginRequest) returns (TokenResponse)
+}

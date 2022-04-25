@@ -1,0 +1,278 @@
+type (
+	ClassIdReq {
+		ClassId int64 `json:"class_id"`
+	}
+
+	PositionIdReq {
+		PositionId int64 `json:"position_id"`
+	}
+
+	MemberIdReq {
+		MemberId int64 `json:"member_id"`
+	}
+
+	ClassCourseTableReply {
+		ClassCourses []*ClassCourse `json:"class_courses"`
+	}
+
+	TeachersCourseTableReply {
+		TeacherCourseTableInfo TeacherCourseTableInfo `json:"teacher_course_table"`
+	}
+
+	ClassCourse {
+		ClassId    int64            `json:"class_Id"`
+		ClassName  string           `json:"class_name"`
+		CourseList []*OrgCourseInfo `json:"course_list"`
+	}
+
+	OrgCourseInfo {
+		Weekday      int8   `json:"weekday"`
+		CourseSort   int8   `json:"course_sort"`
+		SubjectName  string `json:"subject_name"`
+		TeacherName  string `json:"teacher_name"`
+		StartTime    string `json:"start_time"`
+		EndTime      string `json:"end_time"`
+		PositionName string `json:"position_name,omitempty"`
+		ClassName    string `json:"class_name,omitempty"`
+		CourseNote   string `json:"course_note"`
+	}
+
+	TeacherCourseTableInfo {
+		Classes []*OrgCourseInfo `json:"course_info"`
+	}
+
+	CourseInfo {
+		Id           int64  `json:"id,omitempty"`
+		CourseSort   int8   `json:"course_sort,omitempty"`
+		ClassId      int64  `json:"class_id,omitempty"`
+		ClassName    string `json:"class_name,omitempty"`
+		StartTime    string `json:"start_time"`
+		EndTime      string `json:"end_time"`
+		CourseName   string `json:"course_name,omitempty"`
+		PositionName string `json:"position_name,omitempty"`
+		TeacherName  string `json:"teacher_name,omitempty"`
+		CourseFlag   int8   `json:"course_flag,omitempty"`
+		SubjectName  string `json:"subject_name,omitempty"`
+		SubjectId    int64  `json:"subject_id,omitempty"`
+	}
+
+	PositionCourseTableReply {
+		PositionId              int64            `json:"position_id"`
+		PositionName            string           `json:"position_name"`
+		PositionCourseTableInfo []*OrgCourseInfo `json:"position_course_table_info"`
+	}
+	PositionCourseTableInfo {
+		CourseInfo []*CourseInfo `json:"course_info"`
+	}
+
+	CourseTableDeployReply {
+		DeployInfo []*DeployInfo `json:"deploy_info"`
+	}
+
+	DeployInfo {
+		Weekday          int8                `json:"weekday"`
+		CourseDeployInfo []*CourseDeployInfo `json:"course_deploy_info"`
+	}
+
+	CourseDeployInfo {
+		Id         int64  `json:"id,optional"`
+		Weekday    int8   `json:"weekday,omitempty"`
+		StartTime  string `json:"start_time"`
+		EndTime    string `json:"end_time"`
+		Note       string `json:"note"`
+		CourseSort int8   `json:"course_sort,optional"`
+		Grouping   int8   `json:"grouping,optional"`
+		CourseFlag int8   `json:"course_flag"`
+	}
+
+	CourseTableDeploySaveReq {
+		DeployInfo []*CourseDeployInfo `json:"course_deploy_info"`
+	}
+
+	BoolReply {
+		Success bool `json:"success"`
+	}
+
+	DeployGenerateReq {
+		MorningStartTime          string `json:"morning_start_time"`
+		MorningCourseTime         int8   `json:"morning_course_time"`
+		MorningRecessTime         int8   `json:"morning_recess_time"`
+		AfternoonStartTime        string `json:"afternoon_start_time"`
+		AfternoonCourseTime       int8   `json:"afternoon_course_time"`
+		AfternoonRecessTime       int8   `json:"afternoon_recess_time"`
+		MorningRecessIndex        int8   `json:"morning_recess_index"`
+		AfternoonRecessIndex      int8   `json:"afternoon_recess_index"`
+		BreakTime                 int8   `json:"break_time"`
+		MorningCourseCount        int8   `json:"morning_course_count"`
+		AfternoonCourseCount      int8   `json:"afternoon_course_count"`
+		MorningSelfStudyCount     int8   `json:"morning_self_study_count"`
+		NightSelfStudyCount       int8   `json:"night_self_study_count"`
+		MorningSelfStudyTime      int8   `json:"morning_self_study_time,optional"`
+		NightSelfStudyTime        int8   `json:"night_self_study_time,optional"`
+		MorningSelfStudyStartTime string `json:"morning_self_study_start_time"`
+		NightSelfStudyStartTime   string `json:"night_self_study_start_time"`
+	}
+
+	DeployGenerateReply {
+		CourseTableDeploy []*CourseTableGenerate `json:"course_table_deploy"`
+	}
+
+	CourseTableGenerate {
+		StartTime  string `json:"start_time"`
+		EndTime    string `json:"end_time"`
+		Note       string `json:"note"`
+		Weekday    int8   `json:"weekday"`
+		CourseSort int8   `json:"course_sort,omitempty"`
+		Grouping   int8   `json:"grouping,omitempty"`
+		CourseFlag int8   `json:"course_flag"`
+	}
+
+	CourseTableInfoReq {
+		PositionId int64 `json:"position_id"`
+	}
+
+	CourseTableInfo {
+		Weekday    int8          `json:"weekday"`
+		CourseInfo []*CourseInfo `json:"course_info"`
+	}
+
+	CourseTableInfoReply {
+		PositionName string             `json:"position_name"`
+		ClassId      int64              `json:"class_id"`
+		ClassName    string             `json:"class_name"`
+		CourseTable  []*CourseTableInfo `json:"coursetable"`
+	}
+
+	CourseTableAddReq {
+		PositionId int64 `json:"position_id"`
+		ClassId    int64 `json:"class_id"`
+		SubjectId  int64 `json:"subject_id"`
+		Weekday    int8  `json:"weekday"`
+		CourseSort int8  `json:"course_sort"`
+	}
+
+	StudentCourseTable {
+		StudentName     string             `json:"student_name"`
+		Username        string             `json:"username"`
+		ClassName       string             `json:"class_name"`
+		CourseTableInfo []*CourseTableInfo `json:"course_table_info"`
+	}
+
+	StudentTableReply {
+		StudentCourseTables []*StudentCourseTable `json:"student_course_tables"`
+	}
+
+	PageReq {
+		Page  int `form:"page,default=1"`
+		Limit int `form:"limit,default=10"`
+	}
+
+	OrgCourseTableReply {
+		OrgCourseTable []*OrgCourseTable `json:"org_course_table"`
+	}
+
+	OrgCourseTable {
+		Weekday    int8          `json:"weekday"`
+		CourseSort int8          `json:"course_sort"`
+		Note       string        `json:"note"`
+		CourseInfo []*CourseInfo `json:"course_info"`
+	}
+
+	MyCourseTableReq {
+		Type      int   `json:"type"`
+		StudentId int64 `json:"student_id,optional"`
+		MemberId  int64 `json:"member_id,optional"`
+	}
+
+	Id {
+		Id int64 `json:"id"`
+		*PageListReq
+	}
+
+	PageListReq {
+		StageId     int64  `json:"stage_id,optional"`
+		GradeId     int64  `json:"grade_id,optional"`
+		ClassId     int64  `json:"class_id,optional"`
+		TeacherName string `json:"teacher_name,optional"`
+		Page        int    `json:"page,optional,defult=1"`
+		Limit       int    `json:"limit,optional,default=15"`
+	}
+
+	AddTeachReq {
+		ClassId   int64 `json:"class_id"`
+		SubjectId int64 `json:"subject_id"`
+		TeacherId int64 `json:"teacher_id"`
+	}
+	UpdateTeachReq {
+		ClassId   int64 `json:"class_id"`
+		SubjectId int64 `json:"subject_id"`
+		TeacherId int64 `json:"teacher_id"`
+	}
+	TeachResp {
+		Id           int64  `json:"id"`
+		ClassId      int64  `json:"class_id"`
+		SubjectId    int64  `json:"subject_id"`
+		SubjectTitle string `json:"subject_title"`
+		TeacherId    int64  `json:"teacher_id"`
+		TeacherName  string `json:"teacher_name"`
+	}
+	DeleteTeachReq {
+		Ids []int64 `json:"ids"`
+	}
+	//	DeleteTeachReq {
+	//		ClassId   int64 `json:"class_id"`
+	//		SubjectId int64 `json:"subject_id"`
+	//	}
+	ListTeachResp {
+		List []TeachResp `json:"list"`
+	}
+
+	Info {
+		Id    int64  `json:"id"`
+		Title string `json:"title"`
+	}
+)
+
+@server(
+	jwt: Auth
+	middleware: Log
+)
+service coursetable-api {
+	@handler ClassCourseTable
+	post /api/coursetable/class_table (ClassIdReq) returns (ClassCourseTableReply)
+	@handler TeacherCourseTable
+	post /api/coursetable/teacher_table (MemberIdReq) returns (TeachersCourseTableReply)
+	@handler PositionCourseTable
+	post /api/coursetable/position_table (PositionIdReq)returns (PositionCourseTableReply)
+	@handler CourseTableDeploy
+	get /api/coursetable/deploy returns (CourseTableDeployReply)
+	@handler CourseTableDeploySave
+	post /api/coursetable/deploy_save (CourseTableDeploySaveReq) returns (BoolReply)
+	@handler GenerateCourseTableDeploy
+	post /api/coursetable/deploy_generate (DeployGenerateReq) returns (DeployGenerateReply)
+	@handler CourseTableInfo
+	post /api/coursetable/info (CourseTableInfoReq) returns (CourseTableInfoReply)
+	@handler CourseTableAdd
+	post /api/coursetable/add (CourseTableAddReq) returns (BoolReply)
+	@handler OrgCourseTable
+	get /api/coursetable/org_table returns (OrgCourseTableReply)
+	@handler StudentCourseTable
+	get /api/coursetable/student_table (PageReq) returns (StudentTableReply)
+	@handler MyCourseTable
+	post /api/coursetable/my_coursetable (MyCourseTableReq) returns (CourseTableInfoReply)
+	@handler ClearCourseDeploy
+	post /api/coursetable/clear_deploy returns(BoolReply)
+	
+	// ===== teach 任课 =========
+	@handler teachList
+	post /api/class/list-teach(Id) returns (ListTeachResp)
+	
+	@handler addTeach
+	post /api/class/add-teach(AddTeachReq) returns (Id)
+	
+	@handler updateTeach
+	post /api/class/update-teach(UpdateTeachReq)
+	
+	@handler deleteTeach
+	post /api/class/delete-teach(DeleteTeachReq)
+}

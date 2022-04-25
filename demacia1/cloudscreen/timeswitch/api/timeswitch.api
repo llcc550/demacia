@@ -1,0 +1,43 @@
+type (
+	//	**GetTimeSwitchInfo**
+	IdReq {
+		DeviceId int64 `json:"device_id"`
+	}
+
+	TimeSwitchInfo {
+		HolidayFlag   int8             `json:"holiday_flag"`
+		DeviceIds     []int64          `json:"device_ids,omitempty"`
+		SpecialDate   []*DateRange     `json:"special_date"`
+		TimeRangeList []*TimeRangeList `json:"time_range_list"`
+	}
+
+	DateRange {
+		StartDate string `json:"start_date"`
+		EndDate   string `json:"end_date"`
+	}
+
+	TimeRange {
+		StartTime string `json:"start_time"`
+		EndTime   string `json:"end_time"`
+	}
+
+	TimeRangeList {
+		Weekday   int8         `json:"weekday"`
+		TimeRange []*TimeRange `json:"time_range"`
+	}
+	//	**EditTimeSwitchInfo**
+	SuccessResp {
+		Success bool `json:"success"`
+	}
+)
+
+@server(
+	jwt: Auth
+	middleware: Log
+)
+service timeswitch {
+	@handler GetTimeSwitchInfo
+	post /api/timeswitch/info (IdReq) returns (TimeSwitchInfo)
+	@handler EditTimeSwitchInfo
+	post /api/timeswitch/edit (TimeSwitchInfo) returns (SuccessResp)
+}

@@ -1,0 +1,34 @@
+.image_builder:
+  extends:
+    - .docker
+  stage: prepare
+  image: docker:19.03-git
+  script:
+    - source .gitlab/scripts/build_ci_image
+  only:
+    refs:
+      - merge_requests@runeterra/demacia
+
+prepare ci image:
+  extends:
+    - .image_builder
+  variables:
+    BUILD_IMAGE: $CI_IMAGE
+    BUILD_DOCKERFILE: .gitlab/dockerfiles/ci/Dockerfile
+  only:
+    changes:
+      - .gitlab/dockerfiles/ci/*
+      - .gitlab/yml/prepare.gitlab-ci.yml
+
+tests definitions:
+  extends:
+    - .merge_request_pipelines
+    - .except_dep
+  stage: prepare
+  script:
+    - source .gitlab/scripts/touch_make_dependencies
+    - make -f $MAKEFILE_PATH parallel_test_prepare
+  artifacts:
+    paths:
+      - testsdefinitions.txt
+    expire_in: 1h

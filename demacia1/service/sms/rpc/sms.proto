@@ -1,0 +1,53 @@
+syntax = "proto3";
+
+// protoc --go_out=plugins=grpc:. sms.proto
+
+package sms;
+
+option go_package = "sms";
+
+
+message baseSms {
+  string mobile = 1;
+  string content = 2;
+}
+
+message SendRequest {
+  string mobile = 1;
+  repeated string params = 2;
+  string template_id = 3;
+}
+
+message Null {}
+
+message MultiSendRequest {
+  string template_id = 1;
+  repeated smsContent multi = 2;
+}
+
+message smsContent {
+  repeated string mobile = 1;
+  string template_id = 2;
+  repeated string params = 3;
+}
+
+message RmqData  {
+  int32 Type = 1;
+  string Data = 2;
+  string TemplateId = 3;
+  repeated ContentMobile MultiMt = 4;
+}
+
+message ContentMobile{
+  string TemplateId = 1;
+  repeated string Mobile = 2;
+  repeated string Params = 3;
+}
+
+message SmsSendResponse {}
+
+service SmsHandler {
+  rpc MultiSend(MultiSendRequest) returns (SmsSendResponse);
+  rpc Send(SendRequest) returns (SmsSendResponse);
+  rpc Push(RmqData) returns (Null);
+}

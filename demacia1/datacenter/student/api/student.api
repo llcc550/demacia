@@ -1,0 +1,94 @@
+syntax = "v1"
+info(
+	author: "刘传"
+	date: "2021-12-27"
+	desc: "学生-api"
+)
+type (
+	UrlReq {
+		WebsocketUuid string `json:"websocket_uuid"`
+		Url           string `json:"url"`
+	}
+	InsertRequest {
+		StudentId   int64    `json:"student_id,optional"`
+		ClassId     int64    `json:"class_id"`
+		UserName    string   `json:"user_name"`
+		StudentName string   `json:"student_name"`
+		Sex         int8     `json:"sex"`
+		CardNumber  []string `json:"card_number,optional"`
+		IdNumber    string   `json:"id_number,optional"`
+		Avatar      string   `json:"avatar,optional"`
+		Face        string   `json:"face,optional"`
+	}
+	IdsRequest {
+		StudentIds []int64 `json:"student_ids"`
+	}
+	ListConditionRequest {
+		OrgId       int64  `json:"org_id,optional"`
+		StageId     int64  `json:"stage_id,optional"`
+		ClassId     int64  `json:"class_id,optional"`
+		GradeId     int64  `json:"grade_id,optional"`
+		StudentName string `json:"student_name,optional"`
+		FaceStatus  int8   `json:"face_status,optional"`
+		Page        int    `json:"page,optional"`
+		Limit       int    `json:"limit,optional"`
+	}
+	List {
+		StudentId   int64  `json:"student_id"`
+		StudentName string `json:"student_name"`
+		ClassName   string `json:"class_name"`
+		UserName    string `json:"user_name"`
+		Sex         int8   `json:"sex"`
+		Face        string `json:"face"`
+	}
+	ListResponse {
+		List  []*List `json:"list"`
+		Count int     `json:"count"`
+	}
+	IdRequest {
+		StudentId int64 `json:"student_id"`
+	}
+	StudentDetail {
+		StudentId   int64    `json:"student_id"`
+		ClassId     int64    `json:"class_id"`
+		ClassName   string   `json:"class_name"`
+		UserName    string   `json:"user_name"`
+		StudentName string   `json:"student_name"`
+		Sex         int8     `json:"sex"`
+		CardNumber  []string `json:"card_number"`
+		IdNumber    string   `json:"id_number"`
+		Avatar      string   `json:"avatar"`
+		Face        string   `json:"face"`
+	}
+	ClassIdRequest {
+		ClassId int64 `json:"class_id"`
+	}
+)
+@server(
+	jwt: Auth
+)
+service student-api {
+	@handler importStudents
+	post /api/student/import (UrlReq)
+	
+	@handler insertStudents
+	post /api/student/insert (InsertRequest)
+	
+	@handler updateStudents
+	post /api/student/update (InsertRequest)
+	
+	@handler deleteStudents
+	post /api/student/delete (IdsRequest)
+	
+	@handler studentsList
+	post /api/student/page-list (ListConditionRequest) returns (ListResponse)
+	
+	@handler studentsDetail
+	post /api/student/detail (IdRequest) returns (StudentDetail)
+	
+	@handler exportStudents
+	post /api/student/export (ListConditionRequest)
+	
+	@handler classStudents
+	post /api/student/list (ClassIdRequest) returns(ListResponse)
+}

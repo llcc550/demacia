@@ -1,0 +1,17 @@
+---
+Name: websocket.service
+Log:
+  Mode: console
+ListenOn: 127.0.0.1:8080
+Addr: 127.0.0.1:8080
+Tube: &tube websocket_1
+CacheRedis:
+  Host: 127.0.0.1:6379
+Brokers:
+  - 124.71.163.192:32420
+  - 124.71.163.192:32421
+  - 124.71.163.192:32422
+Group: *tube
+Topic: *tube
+Offset: last
+Consumers: 1

@@ -1,0 +1,83 @@
+syntax = "v1"
+info(
+	author: "张春葵"
+	date: "2022-01-13"
+	desc: "部门-api"
+)
+type (
+	ListReq {
+		Title string `json:"title,optional"`
+	}
+	ListInfo {
+		Id          int64  `json:"id"`
+		Title       string `json:"title"`
+		Sort        int64  `json:"sort"`
+		MemberCount int64  `json:"member_count"`
+	}
+	ListResp {
+		List []*ListInfo `json:"list"`
+	}
+	InsertReq {
+		Title string `json:"title"`
+	}
+	UpdateReq {
+		Id    int64  `json:"id"`
+		Title string `json:"title"`
+	}
+	DelReq {
+		Ids []int64 `json:"ids"`
+	}
+	SortInfo {
+		Id   int64 `json:"id"`
+		Sort int64 `json:"sort"`
+	}
+	SortReq {
+		List []*SortInfo `json:"list"`
+	}
+	MemberListReq {
+		DepartmentId int64 `json:"department_id"`
+		Page         int   `json:"page"`
+		Limit        int   `json:"limit"`
+	}
+	MemberInfo {
+		MemberId int64  `json:"member_id"`
+		TrueName string `json:"true_name"`
+		Mobile   string `json:"mobile"`
+	}
+	MemberListResp {
+		Count int64         `json:"count"`
+		List  []*MemberInfo `json:"list"`
+	}
+	MemberIdsReq {
+		DepartmentId int64   `json:"department_id"`
+		MemberIds    []int64 `json:"member_ids"`
+	}
+)
+@server(
+	jwt: Auth
+)
+service department-api {
+	@handler list
+	post /api/department/list (ListReq) returns (ListResp)
+	
+	@handler insert
+	post /api/department/insert (InsertReq)
+	
+	@handler update
+	post /api/department/update (UpdateReq)
+	
+	@handler del
+	post /api/department/del (DelReq)
+	
+	@handler sort
+	post /api/department/sort (SortReq)
+	
+	@handler memberByDepartmentId
+	post /api/department/members (MemberListReq) returns (MemberListResp)
+	
+	@handler memberDeleteFromDepartment
+	post /api/department/member/del (MemberIdsReq)
+	
+	@handler memberInsertIntoDepartment
+	post /api/department/member/insert (MemberIdsReq)
+}

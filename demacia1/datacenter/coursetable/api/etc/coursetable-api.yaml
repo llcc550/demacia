@@ -1,0 +1,30 @@
+Name: coursetable-api
+Host: 127.0.0.1
+Port: 2000
+Postgres:
+  DataSource: postgres://postgres:dinghao8888@122.112.230.215:5432/demacia?sslmode=disable
+CacheRedis:
+  Host: 127.0.0.1:6379
+Auth:
+  AccessSecret: 3c9ownbsz1vthfk4
+PositionRpc:
+  Endpoints:
+    - 124.71.163.192:32011
+MemberRpc:
+  Endpoints:
+    - 124.71.163.192:32003
+StudentRpc:
+  Endpoints:
+    - 124.71.163.192:32009
+SubjectRpc:
+  Endpoints:
+    - 124.71.163.192:32010
+DataBusRpc:
+  Endpoints:
+    - 124.71.163.192:32000
+ClassRpc:
+  Endpoints:
+    - 124.71.163.192:32004
+OrgRpc:
+  Endpoints:
+    - 124.71.163.192:32001

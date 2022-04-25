@@ -1,0 +1,34 @@
+syntax = "proto3";
+
+package student;
+
+option go_package = "student";
+
+message IdRequest {
+  int64 id = 1;
+}
+
+message UserNameRequest {
+  int64 orgId = 1;
+  string userName = 2;
+}
+
+message StudentResponse {
+  int64 id = 1;
+  string name = 2;
+  string userName = 3;
+  string className = 4;
+  string password = 5;
+  int64 orgId = 6;
+  string avatar = 7;
+  string face = 8;
+  string idNumber = 9;
+  string cardNumber = 10;
+  int64 classId = 11;
+}
+
+service Student {
+  rpc findOneById(IdRequest) returns(StudentResponse);
+
+  rpc findOneByUserName(UserNameRequest) returns(StudentResponse);
+}

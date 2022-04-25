@@ -1,0 +1,117 @@
+syntax = "v1"
+info(
+	author: "刘传"
+	date: "2022-01-12"
+	desc: "设备-api"
+)
+type (
+	UpdateTitleReq {
+		DeviceId    int64  `json:"device_id"`
+		DeviceTitle string `json:"device_title"`
+	}
+	InsertReq {
+		DeviceTitle string `json:"device_title"`
+		Sn          string `json:"sn"`
+		OrgId       int64  `json:"org_id"`
+	}
+	DeviceIdReq {
+		DeviceId int64 `json:"device_id"`
+	}
+	DeviceDetail {
+		DeviceId    int64   `json:"device_id"`
+		DeviceTitle string  `json:"device_title"`
+		Sn          string  `json:"sn"`
+		Group       []Group `json:"group,omitempty"`
+		Network     int8    `json:"network"`
+	}
+	Group {
+		GroupId   int64  `json:"group_id"`
+		GroupName string `json:"group_name"`
+	}
+	ListReq {
+		DeviceTitle string `json:"device_title,optional"`
+		Sn          string `json:"sn,optional"`
+		GroupId     int64  `json:"group_id,optional"`
+		Network     int8   `json:"network,optional"`
+		Page        int    `json:"page"`
+		Limit       int    `json:"limit"`
+	}
+	ListResponse {
+		List  []DeviceDetail `json:"list"`
+		Count int            `json:"count"`
+	}
+	GroupInsertReq {
+		GroupName string `json:"group_name"`
+	}
+	GroupIdReq {
+		GroupId int64 `json:"group_id"`
+	}
+	GroupDetail {
+		GroupId   int64          `json:"group_id"`
+		GroupName string         `json:"group_name"`
+		Device    []DeviceDetail `json:"device"`
+	}
+	AddDeviceReq {
+		GroupId   int64   `json:"group_id"`
+		DeviceIds []int64 `json:"device_ids"`
+	}
+	GroupListReq {
+		GroupName string `json:"group_name"`
+	}
+	GroupList {
+		List []GroupDetail `json:"list"`
+	}
+	Selector {
+		List []*DeviceGroup `json:"list"`
+	}
+	DeviceGroup {
+		Id       int64       `json:"id"`
+		Name     string      `json:"name"`
+		Children []*Children `json:"children"`
+	}
+	Children {
+		Id   int64  `json:"id"`
+		Name string `json:"name"`
+		Pid  int64  `json:"pid"`
+	}
+)
+@server(
+	jwt: Auth
+)
+service device-api {
+	@handler updateTitle
+	post /api/device/update-title (UpdateTitleReq)
+	
+	@handler insert
+	post  /api/device/insert (InsertReq)
+	
+	@handler deleteDevice
+	post /api/device/delete (DeviceIdReq)
+	
+	@handler detail
+	post /api/device/detail (DeviceIdReq) returns (DeviceDetail)
+	
+	@handler list
+	post /api/device/list (ListReq) returns (ListResponse)
+	
+	@handler groupInsert
+	post /api/device/group/insert (GroupInsertReq)
+	
+	@handler groupDetail
+	post /api/device/group/detail (GroupIdReq) returns(GroupDetail)
+	
+	@handler addDevice
+	post /api/device/group/add-device (AddDeviceReq)
+	
+	@handler groupUpdate
+	post /api/device/group/update (Group)
+	
+	@handler groupDelete
+	post /api/device/group/delete (GroupIdReq)
+	
+	@handler groupList
+	post /api/device/group/list (GroupListReq) returns(GroupList)
+	
+	@handler selector
+	post /api/device/group/selector () returns(Selector)
+}

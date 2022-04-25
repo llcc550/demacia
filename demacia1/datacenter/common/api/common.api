@@ -1,0 +1,33 @@
+syntax = "v1"
+info(
+	author: "张春葵"
+	date: "2021-12-26"
+	desc: "common-api"
+)
+type (
+	Area {
+		Id   int64  `json:"id"`
+		Pid  int64  `json:"pid"`
+		Name string `json:"name"`
+	}
+	AreaReq {
+		Pid int64 `json:"pid,optional"`
+	}
+	AreaResp {
+		List []*Area `json:"list"`
+	}
+	Ethnic {
+		Id   int64  `json:"id"`
+		Name string `json:"name"`
+	}
+	EthnicResp {
+		List []*Ethnic `json:"list"`
+	}
+)
+service common-api {
+	@handler area
+	post /api/common/area (AreaReq) returns (AreaResp)
+	
+	@handler ethnic
+	get /api/common/ethnic returns (EthnicResp)
+}

@@ -1,0 +1,35 @@
+package main
+
+import (
+	"context"
+	"demacia/cloudscreen/timeswitch/rmq/internal/config"
+	"demacia/cloudscreen/timeswitch/rmq/internal/logic"
+	"demacia/cloudscreen/timeswitch/rmq/internal/svc"
+	"demacia/common/datacenter"
+	"flag"
+	"fmt"
+	"gitlab.u-jy.cn/xiaoyang/go-queue/kq"
+	"gitlab.u-jy.cn/xiaoyang/go-zero/core/conf"
+)
+
+var configFile = flag.String("f", "etc/timeswitch.yaml", "the config file")
+
+func main() {
+	flag.Parse()
+
+	var c config.Config
+	conf.MustLoad(*configFile, &c)
+	ctx := svc.NewServiceContext(c)
+	l := logic.NewConsumerLogic(context.Background(), ctx)
+
+	kqConf := c.KqConf
+	kqConf.Group = datacenter.TimeSwitch
+	kqConf.Topic = datacenter.Kafka
+	q := kq.MustNewQueue(kqConf, kq.WithHandle(func(k, v string) error {
+		l.Consume(k, v)
+		return nil
+	}))
+	defer q.Stop()
+	fmt.Printf("Starting timeswitch rmq consume\n")
+	q.Start()
+}

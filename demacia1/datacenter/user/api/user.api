@@ -1,0 +1,19 @@
+syntax = "v1"
+info(
+	author: "张春葵"
+	date: "2021-12-26"
+	desc: "user-api"
+)
+type (
+	RegisterReq {
+		TrueName string `json:"true_name"`
+		UserName string `json:"user_name"`
+		Mobile   string `json:"mobile"`
+		Password string `json:"password"`
+	}
+)
+
+service user-api {
+	@handler register
+	post /api/user/register (RegisterReq)
+}

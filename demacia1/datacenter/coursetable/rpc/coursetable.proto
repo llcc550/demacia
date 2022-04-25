@@ -1,0 +1,82 @@
+syntax = "proto3";
+
+package coursetable;
+
+option go_package = "coursetable";
+
+message OrgIdReq {
+  int64 orgId = 1;
+}
+
+message CourseInfoReq{
+  int64 orgId = 1;
+  int64 classId = 2;
+  int32 weekday = 3;
+  int32 courseSort = 4;
+}
+
+message CourseTableDeployResp {
+  repeated CourseTableDeploy list = 1;
+}
+
+message CourseTableInfoResp{
+  string positionName = 1;
+  string subjectName = 2;
+  string className = 3;
+  string teacherName = 4;
+}
+
+message CourseTableDeploy{
+  string note = 1;
+  int32 weekday = 2;
+  string startTime = 3;
+  string endTime = 4;
+  int32 grouping = 5;
+  bool courseFlag = 6;
+  int32 courseSort = 7;
+}
+
+message OrgIdAndClassIdReq{
+  int64 orgId = 1;
+  int64 classId = 2;
+}
+
+message CourseTableRecord{
+  string startTime = 1;
+  string subjectName = 2;
+  string positionName = 3;
+  string courseNote = 4;
+  string className = 5;
+  int64  orgId = 6;
+  string endTime = 7;
+  int64  memberId = 8;
+  string memberName = 9;
+}
+
+message CourseTableRecordResp{
+  repeated CourseTableRecord list = 1;
+}
+
+message ClassIdAndMemberIdReq{
+  int64 ClassId = 1;
+  int64 MemberId = 2;
+}
+
+message SuccessResp{
+  bool Success = 1;
+}
+
+message ClassIdAndMemberInfoReq{
+  int64 ClassId = 1;
+  int64 SubjectId = 2;
+  int64 MemberId = 3;
+  string Truename = 4;
+}
+
+service coursetable {
+  rpc getCourseTableDeployListByOrgId(OrgIdReq) returns (CourseTableDeployResp);
+  rpc getCourseTableInfoByOrgIdAndSort(CourseInfoReq)returns(CourseTableInfoResp);
+  rpc getCourseTableRecordInfo(OrgIdAndClassIdReq) returns(CourseTableRecordResp);
+  rpc removeCourseTeacher(ClassIdAndMemberIdReq) returns(SuccessResp);
+  rpc updateCourseTeacher(ClassIdAndMemberInfoReq) returns(SuccessResp);
+}

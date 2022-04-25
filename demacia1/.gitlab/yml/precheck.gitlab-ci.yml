@@ -1,0 +1,39 @@
+.on_refs:
+  stage: precheck
+  only:
+    refs:
+      - branches
+      - tags
+      - merge_request
+
+go vet check:
+  stage: precheck
+  extends:
+    - .on_refs
+    - .no_cache_and_dependencies
+  script:
+    - make -f $MAKEFILE_PATH govet_check
+
+#go lint check:
+#  stage: precheck
+#  extends:
+#    - .on_refs
+#    - .no_cache_and_dependencies
+#  script:
+#    - make -f $MAKEFILE_PATH golint_check
+
+go mod check:
+  stage: precheck
+  extends:
+    - .on_refs
+    - .no_cache_and_dependencies
+  script:
+    - make -f $MAKEFILE_PATH gomod_check
+
+check modules:
+  stage: precheck
+  extends:
+    - .on_refs
+    - .no_cache_and_dependencies
+  script:
+    - make -f $MAKEFILE_PATH check_modules

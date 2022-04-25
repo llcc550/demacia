@@ -1,0 +1,42 @@
+.coverage_job:
+  extends:
+    - .merge_request_pipelines
+    - .except_dep
+  stage: coverage
+  when: always
+
+test coverage report:
+  extends:
+    - .coverage_job
+  coverage: /regular total:\s+\(statements\)\s+\d+.\d+\%/
+  script:
+    - source .gitlab/scripts/touch_make_dependencies
+    - make -f $MAKEFILE_PATH parallel_test_coverage_report
+    - make -f $MAKEFILE_PATH parallel_test_coverage_report TESTFLAGS="-cover -race"
+  artifacts:
+    paths:
+      - out/coverage/*
+    expire_in: 1h
+
+test junit report:
+  extends:
+    - .coverage_job
+  image: $CI_IMAGE
+  needs:
+    - unit test
+  script:
+    - source .gitlab/scripts/touch_make_dependencies
+    - make -f $MAKEFILE_PATH parallel_test_junit_report
+  artifacts:
+    reports:
+      junit: out/junit/report.xml
+
+race conditions detector:
+  extends:
+    - .coverage_job
+  needs:
+    - unit test with race
+  script:
+    - source .gitlab/scripts/touch_make_dependencies
+    - make -f $MAKEFILE_PATH check_race_conditions
+

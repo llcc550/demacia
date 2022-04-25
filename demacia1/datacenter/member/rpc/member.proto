@@ -1,0 +1,44 @@
+syntax = "proto3";
+
+package member;
+
+option go_package = "member";
+
+message IdReq{
+  int64 id = 1;
+}
+
+message UserNameReq{
+  string userName = 1;
+}
+
+message MemberInfo{
+  int64 id = 1;
+  int64 orgId = 2;
+  string userName = 3;
+  string trueName = 4;
+  string mobile = 5;
+  string password = 6;
+  string avatar = 7;
+  int64 role = 8;
+}
+
+message InsertReq {
+  string userName = 1;
+  int64 orgId = 2;
+  string trueName = 3;
+  string mobile = 4;
+  string password = 5;
+}
+
+message NullResp {}
+
+service member {
+  rpc findOneById(IdReq) returns(MemberInfo);
+
+  rpc findOneByUserName(UserNameReq) returns(MemberInfo);
+
+  rpc insert(InsertReq) returns(IdReq);
+
+  rpc deleteById(IdReq) returns(NullResp);
+}

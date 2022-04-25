@@ -1,0 +1,14 @@
+
+!**/Dockerfile
+!**/Makefile
+
+.idea
+**/.DS_Store
+**/logs
+**/*.pem
+**/*.prof
+**/*.p12
+!vendor/**/*.pem
+!vendor/**/*.prof
+!vendor/**/*.p12
+

@@ -1,0 +1,7 @@
+Name: websocket-api
+Host: 127.0.0.1
+Port: 2000
+CacheRedis:
+  Host: 127.0.0.1:6379
+Auth:
+  AccessSecret: 3c9ownbsz1vthfk4

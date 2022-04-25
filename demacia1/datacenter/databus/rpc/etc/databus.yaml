@@ -1,0 +1,10 @@
+Name: demacia.databus.rpc
+ListenOn: 127.0.0.1:2100
+Brokers:
+  - 124.71.163.192:32420
+  - 124.71.163.192:32421
+  - 124.71.163.192:32422
+Mongo:
+  Url: 124.71.163.192:32500/demacia
+  Collection:
+    Log: log

@@ -1,0 +1,15 @@
+#!/bin/sh
+
+if [ "$(cat code-quality-report.out)" != "[]" ] ; then
+  COMMIT_MESSAGE=$(echo '` '$CI_COMMIT_MESSAGE' `')
+  REPORT_MAIN=$(cat code-quality-report.out)
+  cat > report-$CI_COMMIT_SHA-$CI_MERGE_REQUEST_SOURCE_BRANCH_NAME.md << EOF
+**Commit Message**: $COMMIT_MESSAGE
+
+Something is wrong! This is report following.
+
+| 文件地址 | Issue类型 | Issue建议 |
+| :-----| ----: | :----: |
+$REPORT_MAIN
+EOF
+fi

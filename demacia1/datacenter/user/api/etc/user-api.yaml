@@ -1,0 +1,7 @@
+Name: user-api
+Host: 127.0.0.1
+Port: 2000
+Postgres:
+  DataSource: postgres://postgres:dinghao8888@122.112.230.215:5432/demacia?sslmode=disable
+CacheRedis:
+  Host: 127.0.0.1:6379

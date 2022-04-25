@@ -1,0 +1,140 @@
+syntax = "v1"
+
+info(
+	title: "photowall"
+	desc: "云屏3.0-照片墙"
+	author: "zoutao"
+)
+
+type (
+	Id {
+		Id int64 `json:"id"`
+	}
+	Ids {
+		Ids []int64 `json:"ids"`
+	}
+	TitleReq {
+		Title string `json:"title"`
+	}
+	IdTitleReq {
+		Id    int64  `json:"id"`
+		Title string `json:"title"`
+	}
+	Info {
+		Id    int64  `json:"id"`
+		Title string `json:"title"`
+		Url   string `json:"images,optional"`
+	}
+	ListReq {
+		Title string `json:"title,optional"`
+		Page  int    `json:"page,optional,default=1"`
+		Limit int    `json:"limit,optional,default=10"`
+	}
+	List {
+		List  []Info `json:"list"`
+		Total int    `json:"total"`
+	}
+)
+// photos
+type (
+	PhotosCommonField {
+		FolderId int64 `json:"folder_id,optional,default=0"`
+		DeviceId int64 `json:"device_id,optional,default=0"`
+		PhotoId  int64 `json:"photo_id,optional,default=0"`
+	}
+	ListPhotoReq {
+		PhotosCommonField
+		ListReq
+	}
+	RenameReq {
+		PhotosCommonField
+		IdTitleReq
+	}
+	DeviceSelectorReq {
+		DeviceIds      []int64 `json:"device_ids,optional"`
+		DeviceGroupIds []int64 `json:"device_group_ids,optional"`
+	}
+	TimeField {
+		ScreenSaverWaitTime  int    `json:"screensaver_wait_time,optional"`  // 屏保等待时间
+		PublishStartTime     string `json:"publish_start_time,optional"`     // 发布开始时间
+		PublishEndTime       string `json:"publish_end_time,optional"`       // 发布结束时间
+		ScreenSaverStartTime string `json:"screensaver_start_time,optional"` // 屏保开始时间
+		ScreenSaverEndTime   string `json:"screensaver_end_time,optional"`   // 屏保结束时间
+		LockScreenStartTime  string `json:"lockscreen_start_time,optional"`  // 锁屏开始时间
+		LockScreenEndTime    string `json:"lockscreen_end_time,optional"`    // 锁屏结束时间
+		ToppingStart         string `json:"topping_start_time,optional"`     // 置顶开始时间
+		ToppingEnd           string `json:"topping_end_time,optional"`       // 置顶结束时间
+	}
+	EditReq {
+		PhotosCommonField
+		DeviceSelectorReq
+		TimeField
+	}
+	DeleteReq {
+		PhotosCommonField
+		Ids
+	}
+	PhotoInfo {
+		Id                int64  `json:"id"`
+		Title             string `json:"title"`
+		Url               string `json:"url"`
+		CreatedTime       string `json:"created_time"`
+		PublishStatus     int    `json:"publish_status"`      // 发布状态
+		ScreenSaverStatus int    `json:"screen_saver_status"` // 屏保状态
+		LockScreenStatus  int    `json:"lock_screen_status"`  // 锁屏状态
+		ToppingStatus     int    `json:"topping_status"`      // 置顶状态
+	}
+	ListPhoto {
+		List  []PhotoInfo `json:"list"`
+		Total int         `json:"total"`
+	}
+)
+
+@server(
+	jwt: Auth
+	group: photofolder
+)
+service photowall-api {
+	// 相册列表
+	@handler ListPhotowall
+	post /api/photofolder/list(ListReq) returns (List)
+	// 新增相册
+	@handler InsertPhotowall
+	post /api/photofolder/Insert(TitleReq) returns (Id)
+	// 重命名相册
+	@handler RenamePhotowall
+	post /api/photofolder/rename(IdTitleReq)
+	// 删除相册
+	@handler DeletedPhotowall
+	post /api/photofolder/delete(Id)
+	
+}
+
+@server(
+	jwt: Auth
+	group: photos
+)
+service photowall-api {
+	// 相册详情列表
+	@handler ListPhoto
+	post /api/photos/photolist (ListPhotoReq) returns (ListPhoto)
+	// 重命名
+	@handler Rename
+	post /api/photos/Rename (RenameReq)
+	// 编辑屏保
+	@handler editscreensaver
+	post /api/photos/editscreensaver (EditReq)
+	// 编辑锁屏
+	@handler editlockscreen
+	post /api/photos/editlockscreen (EditReq)
+	// 编辑置顶
+	@handler edittopping
+	post /api/photos/edittopping (EditReq)
+	// 编辑发布
+	@handler editpublish
+	post /api/photos/editpublish (EditReq)
+	// 删除
+	@handler Delete
+	post /api/photos/delete (DeleteReq)
+	
+}

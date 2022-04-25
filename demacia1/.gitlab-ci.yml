@@ -1,0 +1,12 @@
+stages:
+  - precheck
+  - prepare
+  - test
+  - coverage
+
+include:
+  - local: /.gitlab/yml/_common.gitlab-ci.yml
+  - local: /.gitlab/yml/precheck.gitlab-ci.yml
+  - local: /.gitlab/yml/prepare.gitlab-ci.yml
+  - local: /.gitlab/yml/test.gitlab-ci.yml
+  - local: /.gitlab/yml/coverage.gitlab-ci.yml

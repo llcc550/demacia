@@ -1,0 +1,84 @@
+syntax = "v1"
+info(
+	author: "张春葵"
+	date: "2022-02-26"
+	desc: "机构-api"
+)
+
+type (
+	OrgAddReq {
+		Title        string `json:"title"`
+		TrueName     string `json:"true_name"`
+		Mobile       string `json:"mobile"`
+		UserName     string `json:"user_name"`
+		Password     string `json:"password"`
+		ActivateDate string `json:"activate_date"`
+		ExpireDate   string `json:"expire_date"`
+		Addr         string `json:"addr"`
+		Msg          string `json:"msg"`
+		AgentId      int64  `json:"agent_id"`
+		TermId       int64  `json:"term_id"`
+		AreaId       int64  `json:"area_id"`
+		IsSchool     int8   `json:"is_school"`
+	}
+	OrgUpdateReq {
+		Id           int64  `json:"id"`
+		Title        string `json:"title"`
+		TrueName     string `json:"true_name"`
+		Mobile       string `json:"mobile"`
+		ActivateDate string `json:"activate_date"`
+		ExpireDate   string `json:"expire_date"`
+		Addr         string `json:"addr"`
+		Msg          string `json:"msg"`
+		AreaId       int64  `json:"area_id"`
+	}
+	IdReq {
+		Id int64 `json:"id"`
+	}
+	OrgListReq {
+		Title      string `json:"title"`
+		ProvinceId int64  `json:"province_id"`
+		CityId     int64  `json:"city_id"`
+		AreaId     int64  `json:"area_id"`
+		Page       int    `json:"page"`
+		Limit      int    `json:"limit"`
+	}
+	OrgInfo {
+		Id           int64  `json:"id"`
+		AreaTitle    string `json:"area_title"`
+		Title        string `json:"title"`
+		ActivateDate string `json:"activate_date"`
+		ExpireDate   string `json:"expire_date"`
+		TrueName     string `json:"true_name"`
+		Mobile       string `json:"mobile"`
+		UserName     string `json:"user_name"`
+		Addr         string `json:"addr"`
+		Msg          string `json:"msg"`
+		CreatedTime  int64  `json:"create_time"`
+		OrgStatus    int8   `json:"org_status"`
+	}
+	OrgListResp {
+		Count int64      `json:"count"`
+		List  []*OrgInfo `json:"list"`
+	}
+)
+@server(
+	jwt: Auth
+	middleware: Log
+)
+service organization-api {
+	@handler add
+	post /api/organization/add (OrgAddReq) returns (IdReq)
+	
+	@handler update
+	post /api/organization/update (OrgUpdateReq)
+	
+	@handler del
+	post /api/organization/del (IdReq)
+	
+	@handler list
+	post /api/organization/list (OrgListReq) returns (OrgListResp)
+	
+	@handler detail
+	post /api/organization/detail (IdReq) returns (OrgInfo)
+}

@@ -1,0 +1,83 @@
+type (
+	Id {
+		Id int64 `json:"id"`
+	}
+	AddSubjectReq {
+		Title  string  `json:"title"`
+		Grades []int64 `json:"grades"`
+	}
+	Ids {
+		Id []int64 `json:"id"`
+	}
+	UpdateSubjectReq {
+		Id     int64   `json:"id"`
+		Title  string  `json:"title"`
+		Grades []int64 `json:"grades"`
+	}
+
+	Grade {
+		Id    int64  `json:"id"`
+		Title string `json:"title"`
+	}
+	Info {
+		Id    int64  `json:"id"`
+		Title string `json:"title"`
+	}
+	SubjectListResp {
+		Id     int64   `json:"id"`
+		Title  string  `json:"title"`
+		Grades []Grade `json:"grades"`
+	}
+	SubjectListsResp {
+		List []SubjectListResp `json:"list"`
+	}
+	GradeManageReq {
+		Id     int64   `json:"id"`
+		Grades []int64 `json:"grades"`
+	}
+
+	TeacherManageReq {
+		Id       int64   `json:"id"`
+		Teachers []int64 `json:"teachers"`
+	}
+	SubjectTeacherResp {
+		Id       int64  `json:"id"`
+		TrueName string `json:"true_name"`
+	}
+	ListSubjectTeacherResp {
+		List []SubjectTeacherResp `json:"list"`
+	}
+	TitleReq {
+		GradeId int64  `json:"grade_id,optional"`
+		Title   string `json:"title,optional"`
+	}
+)
+
+@server(
+	jwt: Auth
+	middleware: Log
+)
+
+service subject-api {
+	@handler SubjectList
+	post /api/subject/list (TitleReq) returns (SubjectListsResp)
+	
+	@handler AddSubject
+	post /api/subject/insert (AddSubjectReq) returns (Id)
+	
+	@handler Rename
+	post /api/subject/Rename (Info)
+	
+	@handler GradeManage
+	post /api/subject/GradeManage (GradeManageReq)
+	
+	@handler DeletedSubject
+	post /api/subject/delete (Ids) returns ()
+	
+	@handler TeacherManage
+	post /api/subject/TeacherManage (TeacherManageReq)
+	
+	@handler GetSubjectTeacher
+	post /api/subject/getSubjectTeacher (Id) returns (ListSubjectTeacherResp)
+	
+}

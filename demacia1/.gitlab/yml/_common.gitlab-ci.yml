@@ -1,0 +1,59 @@
+variables:
+  CI_IMAGE: swr.cn-east-3.myhuaweicloud.com/wx-xiaoyang-public/golang:runner-demacia
+  GOROOT: /usr/local/go
+  # Following variables are used in some jobs to install specified software
+  DOCKER_VERSION: 20.10.12
+  DOCKER_DRIVER: overlay
+  DOCKER_MACHINE_VERSION: "0.16.2"
+  DUMB_INIT_VERSION: "1.0.2"
+  GIT_VERSION: "2.21.1"
+  GIT_VERSION_BUILD: "1"
+  GIT_LFS_VERSION: "2.7.1"
+  LICENSE_MANAGEMENT_SETUP_CMD: echo "Skip setup. Dependency already vendored"
+  MAKEFILE_PATH: ".gitlab/Makefile"
+
+image: $CI_IMAGE
+
+before_script:
+- unset GPG_KEY
+
+# Skip all jobs except the ones that begin and with 'dep'.
+# Used for commits including ONLY go.mod or go.sum changes.
+.except_dep:
+  except:
+    variables:
+    - $CI_MERGE_REQUEST_SOURCE_BRANCH_NAME =~ /(^dep[\/-].*|.*-dep$)/
+
+.merge_request_pipelines:
+  only:
+    refs:
+      - merge_requests
+      - master@runeterra/demacia
+      - /\A[0-9]+-[0-9]+-stable\Z/@runeterra/demacia
+      - /\Av[0-9]+\.[0-9]+\.[0-9]+(-rc[0-9]+)?\Z/@runeterra/demacia
+
+.no_cache:
+  cache: {}
+
+.no_dependencies:
+  dependencies: []
+
+.no_cache_and_dependencies:
+  extends:
+    - .no_cache
+    - .no_dependencies
+
+.docker:
+  extends:
+    - .except_dep
+  services:
+    - docker:${DOCKER_VERSION}-dind
+  variables:
+    CI_IMAGE: ${CI_IMAGES}
+    DOCKER_DRIVER: overlay2
+    DOCKER_HOST: tcp://docker:2376
+    DOCKER_TLS_VERIFY: 1
+    DOCKER_TLS_CERTDIR: "/certs"
+    DOCKER_CERT_PATH: "/certs/client"
+  tags:
+    - docker

@@ -1,0 +1,203 @@
+syntax = "v1"
+info(
+	author: "张春葵"
+	date: "2021-12-11"
+	desc: "班级-api"
+)
+type (
+	//api/class/ ========= common 公用 =========
+	Id {
+		Id int64 `json:"id"`
+		*PageListReq
+	}
+	Title {
+		Title string `json:"title"`
+	}
+	Info {
+		Id    int64  `json:"id"`
+		Title string `json:"title"`
+	}
+	ListRespose {
+		List []Info `json:"list"`
+	}
+	//api/class ========= stage 学段 =========
+	StageInfo {
+		Id    int64  `json:"id,optional"`
+		Title string `json:"title"`
+		Year  int64  `json:"year"`
+	}
+
+	StageListRespose {
+		List []*StageInfo `json:"list"`
+	}
+
+	/// ========= teachr 教师 =========
+	Teacher {
+		Id       int64  `json:"id"`
+		TrueName string `json:"true_name"`
+	}
+	// ========= class 班级  =========
+	ClassCompletionReq {
+		StageId int64 `json:"stage_id"`
+		GradeId int64 `json:"grade_id"`
+		Num     int8  `json:"num,default=1,optional"`
+	}
+	PageListReq {
+		StageId     int64  `json:"stage_id,optional"`
+		GradeId     int64  `json:"grade_id,optional"`
+		ClassId     int64  `json:"class_id,optional"`
+		TeacherName string `json:"teacher_name,optional"`
+		Page        int    `json:"page,optional,defult=1"`
+		Limit       int    `json:"limit,optional,default=15"`
+	}
+	ClassInfo {
+		Id            int64      `json:"id"`
+		StageId       int64      `json:"stage_id"`
+		GradeId       int64      `json:"grade_id"`
+		StageTitle    string     `json:"stage_title"`
+		FullName      string     `json:"full_name"`
+		AliasName     string     `json:"alias_name"`
+		Class_teacher []*Teacher `json:"class_teacher"`
+		Desc          string     `json:"desc"`
+		MemberNum     int64      `json:"member_num"`
+	}
+	AddClassReq {
+		Id          int64   `json:"id,optional"`
+		StageId     int64   `json:"stage_id"`
+		GradeId     int64   `json:"grade_id"`
+		AliasName   string  `json:"alias_name,optional"`
+		TeacherId   []int64 `json:"teacher_id,optional"`
+		Description string  `json:"description,optional"`
+		Sort        int8    `json:"sort"`
+	}
+	BatchAddClassReq {
+		StageId    int64 `json:"stage_id"`
+		GradeId    int64 `json:"grade_id"`
+		Completion int8  `json:"completion"`
+		Num        int8  `json:"num"`
+	}
+
+	ClassListRespose {
+		List  []*ClassInfo `json:"list"`
+		Total int          `json:"total"`
+		Limit int          `json:"limit"`
+	}
+	// 获取机构下的所有学段年级列表
+	ListStageGradeInfo {
+		Id     int64   `json:"id"`
+		Title  string  `json:"title"`
+		Grades []*Info `json:"grades"`
+	}
+	ListGradeByOrgResp {
+		List []*ListStageGradeInfo `json:"list"`
+	}
+	TreeClassResp {
+		Id       int64           `json:"id"`
+		Name     string          `json:"name"`
+		Num      int64           `json:"num"`
+		Children []TreeClassResp `json:"children"`
+	}
+	// =========== 任课 =========
+	AddTeachReq {
+		ClassId   int64 `json:"class_id"`
+		SubjectId int64 `json:"subject_id"`
+		TeacherId int64 `json:"teacher_id"`
+	}
+	UpdateTeachReq {
+		ClassId   int64 `json:"class_id"`
+		SubjectId int64 `json:"subject_id"`
+		TeacherId int64 `json:"teacher_id"`
+	}
+	TeachResp {
+		Id           int64  `json:"id"`
+		ClassId      int64  `json:"class_id"`
+		SubjectId    int64  `json:"subject_id"`
+		SubjectTitle string `json:"subject_title"`
+		TeacherId    int64  `json:"teacher_id"`
+		TeacherName  string `json:"teacher_name"`
+	}
+	DeleteTeachReq {
+		ClassId   int64 `json:"class_id"`
+		SubjectId int64 `json:"subject_id"`
+	}
+	ListTeachResp {
+		List []TeachResp `json:"list"`
+	}
+)
+@server(
+	jwt: Auth
+)
+service class-api {
+	
+	// ===== stage 学段 =========
+	@handler stagesList
+	get /api/class/getStageList returns (StageListRespose)
+	
+	@handler addStage
+	post /api/class/addStage (StageInfo) returns (Id)
+	
+	@handler editStage
+	post /api/class/edit-stage-by-id ( Info )
+	
+	@handler deleteStage
+	post /api/class/del-stage-by-id ( Id )
+	
+	// ===== grade 年级 =========
+	
+	@handler gradesByStageId
+	post /api/class/grades-by-stage-id (Id) returns (ListRespose)
+	
+	@handler gradesByOrgId
+	get /api/class/grades-by-org-id returns (ListGradeByOrgResp)
+	
+	@handler addGrade
+	post /api/class/addGrade (Info) returns (Id)
+	
+	@handler updateGradeById
+	post /api/class/update-grade-by-id (Info)
+	
+	@handler deleteGradeById
+	post /api/class/delete-grade-by-id (Id)
+	
+	// ===== class 班级 =========
+	@handler classCompletion
+	post /api/class/class-completion (ClassCompletionReq) returns (ListRespose)
+	
+	@handler classesByGradeId
+	post /api/class/classes-by-grade-id (Id) returns (ClassListRespose)
+	
+	@handler classListByOrgId
+	post /api/class/class-list-by-org-id (PageListReq) returns (ClassListRespose)
+	
+	@handler addClass
+	post /api/class/add-class-by-grade-id (AddClassReq) returns (Id)
+	
+	@handler batchAddClass
+	post /api/class/batch-add-class-by-grade-id (BatchAddClassReq)
+	
+	@handler updateClass
+	post /api/class/update-class-by-grade-id (AddClassReq)
+	
+	@handler deleteClass
+	post /api/class/delete-class-by-id (Id)
+	
+	@handler getClassById
+	post /api/class/get-class-by-id (Id) returns (ClassInfo)
+	
+	// 学校学段年级班级树形结构
+	@handler treeClass
+	get /api/class/get-class-tree returns (TreeClassResp)
+	
+	// ===== teach 任课 =========
+	@handler teachList
+	post /api/class/list-teach(Id) returns (ListTeachResp)
+	
+	@handler addTeach
+	post /api/class/add-teach(AddTeachReq) returns (Id)
+	
+	@handler updateTeach
+	post /api/class/update-teach(UpdateTeachReq)
+	
+	@handler deleteTeach
+	post /api/class/delete-teach(DeleteTeachReq)
+}

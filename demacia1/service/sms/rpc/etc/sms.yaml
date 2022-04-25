@@ -1,0 +1,42 @@
+Name: sms.rpc
+Log:
+  Mode: console
+ListenOn: 127.0.0.1:2100
+Push: true
+CacheRedis:
+  Host: 127.0.0.1:6379
+  Type: node
+  Pass: ''
+Postgres:
+  DataSource: postgres://postgres:dinghao8888@122.112.230.215:5432/demacia?sslmode=disable
+Brokers:
+  - 124.71.163.192:32420
+  - 124.71.163.192:32421
+  - 124.71.163.192:32422
+Topic: sms
+Limiter:
+  Expiry: 86400
+  KeyPrefix: "cache:sms:limit:"
+  Quota: 20
+  Redis:
+    Host: 127.0.0.1:6379
+    Type: node
+    Pass: ''
+Huawei:
+  BaseSendUrl: 'https://rtcsms.cn-north-1.myhuaweicloud.com:10743/sms/batchSendSms/v1'
+  BatchSendUrl: 'https://rtcsms.cn-north-1.myhuaweicloud.com:10743/sms/batchSendDiffSms/v1'
+  AppKey: 'GALEzO79PGL98C5k6VsB6OEtHs5C'
+  AppSecret: 'j0997zd6NMSP1MAR0l7AjMA143re'
+  Templates:
+    captcha:
+      TemplateSign: '8821042508936'
+      TemplateId: '1c99aa86f19e499aab1e40478c1046e0'
+    visitor:
+      TemplateSign: '8821042508882'
+      TemplateId: 'ecb6e3c8bbec43d4bd085d0ecd41cda9'
+    stadium:
+      TemplateSign: '8821042508882'
+      TemplateId: 'd9f6605ec9514fcb9fd78a3bacc0a0e7'
+    remark:
+      TemplateSign: '8821042508882'
+      TemplateId: 'e12f46a4f14343559e9081a0c51dfba2'

@@ -1,0 +1,17 @@
+syntax = "proto3";
+
+package websocket;
+
+option go_package = "websocket";
+
+service Websocket {
+  rpc Push (Request) returns (Null);
+}
+
+message Request {
+  string key = 1;
+  int64 code = 2;
+  string msg = 3;
+}
+
+message Null {}

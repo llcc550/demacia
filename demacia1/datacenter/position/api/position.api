@@ -1,0 +1,67 @@
+syntax = "v1"
+
+type (
+	Device {
+		Id         int64  `json:"device_id"`
+		DeviceName string `json:"device_name,optional"`
+	}
+
+	PositionAddReq {
+		PositionName string  `json:"position_name"`
+		DeviceIds    []int64 `json:"device_ids,optional"`
+	}
+
+	SuccessReply {
+		Success bool `json:"success"`
+	}
+
+	PageReq {
+		Page         int    `form:"page,default=1"`
+		Limit        int    `form:"limit,default=10"`
+		PositionName string `form:"position_name,optional"`
+	}
+
+	PositionListReply {
+		Count     int         `json:"count"`
+		Positions []*Position `json:"positions"`
+	}
+
+	Position {
+		Id           int64     `json:"position_id"`
+		PositionName string    `json:"position_name"`
+		ClassName    string    `json:"class_name"`
+		Devices      []*Device `json:"devices"`
+	}
+
+	PositionEditReq {
+		Id           int64   `json:"position_id"`
+		PositionName string  `json:"position_name"`
+		ClassId      int64   `json:"class_id"`
+		DeviceIds    []int64 `json:"device_ids"`
+	}
+
+	PositionIdReq {
+		Id int64 `json:"position_id"`
+	}
+
+	GeneratePositionReq {
+		WebsocketUuid string `json:"websocket_uuid"`
+	}
+)
+
+@server(
+	jwt: Auth
+	middleware: Log
+)
+service position-api {
+	@handler PositionAdd
+	post /api/position/add (PositionAddReq) returns (SuccessReply)
+	@handler PositionList
+	get /api/position/list (PageReq) returns (PositionListReply)
+	@handler GeneratePosition
+	post /api/position/generate (GeneratePositionReq) returns (SuccessReply)
+	@handler PositionEdit
+	post /api/position/edit (PositionEditReq) returns (SuccessReply)
+	@handler PositionRemove
+	post /api/position/remove (PositionIdReq) returns (SuccessReply)
+}

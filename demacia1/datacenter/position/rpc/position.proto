@@ -1,0 +1,25 @@
+syntax = "proto3";
+
+package position;
+
+option go_package = "position";
+
+message ClassIdReq{
+  int64 ClassId = 1;
+}
+
+message PositionInfo{
+  int64 Id = 1;
+  int64 ClassId = 2;
+  string ClassName = 3;
+  string PositionName = 4;
+}
+
+message PositionIdReq{
+  int64 PositionId = 1;
+}
+
+service position{
+  rpc FindByClassId(ClassIdReq) returns (PositionInfo);
+  rpc FindById(PositionIdReq) returns (PositionInfo);
+}

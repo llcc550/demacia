@@ -1,0 +1,21 @@
+syntax = "proto3";
+
+package user;
+
+option go_package = "user";
+
+message UserNameReq{
+  string userName = 1;
+}
+
+message UserInfo{
+  int64 id = 1;
+  string userName = 2;
+  string trueName = 3;
+  string mobile = 4;
+  string password = 5;
+}
+
+service user {
+  rpc findOneByUserName(UserNameReq) returns(UserInfo);
+}

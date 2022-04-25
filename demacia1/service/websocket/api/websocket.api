@@ -1,0 +1,20 @@
+syntax = "v1"
+info(
+	author: "张春葵"
+	date: "2021-12-11"
+	desc: "websocket-api"
+)
+type (
+	Response {
+		Recommend string   `json:"recommend"`
+		List      []string `json:"list"`
+	}
+)
+
+@server(
+	jwt: Auth
+)
+service websocket-api {
+	@handler nodes
+	get /api/websocket/nodes returns (Response)
+}

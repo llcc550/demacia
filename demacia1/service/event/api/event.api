@@ -1,0 +1,102 @@
+syntax = "v1"
+info(
+	author: "刘传"
+	date: "2022-01-19"
+	desc: "通知-api"
+)
+type (
+	CategoryInsertReq {
+		CategoryName string `json:"category_name"`
+	}
+	CategoryUpdateReq {
+		CategoryId   int64  `json:"category_id"`
+		CategoryName string `json:"category_name"`
+	}
+	CategoryIdReq {
+		CategoryId int64 `json:"category_id"`
+	}
+	CategoryListReq {
+		CategoryName string `json:"category_name"`
+	}
+	CategoryList {
+		CategoryId   int64  `json:"category_id"`
+		CategoryName string `json:"category_name"`
+	}
+	CategoryListResponse {
+		List []*CategoryList `json:"list"`
+	}
+	EventInsertReq {
+		EventId      int64   `json:"event_id,optional"`
+		EventName    string  `json:"event_name"`
+		EventContent string  `json:"event_content"`
+		CategoryId   int64   `json:"category_id"`
+		PushType     int8    `json:"push_type"`
+		StartTime    int64   `json:"start_time"`
+		EndTime      int64   `json:"end_time"`
+		PositionIds  []int64 `json:"position_ids"`
+	}
+	EventIdReq {
+		EventId int64 `json:"event_id"`
+	}
+	EventDetail {
+		EventId      int64       `json:"event_id"`
+		EventName    string      `json:"event_name"`
+		EventContent string      `json:"event_content"`
+		CategoryId   int64       `json:"category_id"`
+		CategoryName string      `json:"category_name"`
+		PushType     int8        `json:"push_type"`
+		StartTime    int64       `json:"start_time"`
+		EndTime      int64       `json:"end_time"`
+		CreatedAt    int64       `json:"created_at"`
+		MemberId     int64       `json:"member_id"`
+		MemberName   string      `json:"member_name"`
+		Position     []*Position `json:"position"`
+	}
+	Position {
+		PositionId    int64  `json:"position_id"`
+		PositionTitle string `json:"position_title"`
+	}
+	ListReq {
+		EventName   string  `json:"event_name,optional"`
+		MemberName  string  `json:"member_name,optional"`
+		StartTime   int64   `json:"start_time,optional"`
+		EndTime     int64   `json:"end_time,optional"`
+		PositionIds []int64 `json:"position_ids,optional"`
+		CategoryId  int64   `json:"category_id,optional"`
+		Page        int     `json:"page"`
+		Limit       int     `json:"limit"`
+	}
+	ListResponse {
+		List  []*EventDetail `json:"list"`
+		Count int            `json:"count"`
+	}
+)
+
+service event-api {
+	@handler CategoryInsert
+	post /api/event/category/insert (CategoryInsertReq)
+	
+	@handler CategoryUpdate
+	post /api/event/category/update (CategoryUpdateReq)
+	
+	@handler CategoryDelete
+	post /api/event/category/delete (CategoryIdReq)
+	
+	@handler CategoryList
+	post /api/event/category/list (CategoryInsertReq) returns (CategoryListResponse)
+	
+	@handler EventInsert
+	post /api/event/insert (EventInsertReq)
+	
+	@handler EventUpdate
+	post /api/event/update (EventInsertReq)
+	
+	@handler EventDelete
+	post /api/event/delete (EventIdReq)
+	
+	@handler EventDetail
+	post /api/event/detail (EventIdReq) returns (EventDetail)
+	
+	@handler EventList
+	post /api/event/list (ListReq) returns (ListResponse)
+}

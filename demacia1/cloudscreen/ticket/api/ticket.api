@@ -1,0 +1,18 @@
+syntax = "v1"
+info(
+	author: "张春葵"
+	date: "2021-12-11"
+	desc: "工单-api"
+)
+type (
+	AddReq {
+		UserId     int64   `json:"user_id"`
+		OrgId      []int64 `json:"org_id"`
+		TicketDate string  `json:"ticket_date"`
+	}
+)
+
+service ticket-api {
+	@handler add
+	post /api/ticket/add (AddReq)
+}

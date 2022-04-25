@@ -1,0 +1,77 @@
+syntax = "proto3";
+
+package class;
+
+option go_package = "class";
+
+message IdReq{
+  int64 id = 1;
+}
+
+message IdsReq{
+  repeated int64 id=1;
+}
+message ClassSubjectIdReq{
+  int64 classId = 1;
+  int64 subjectId = 2;
+}
+message FullNameReq{
+  int64 orgId = 1;
+  string fullName = 2;
+}
+message ClassSubjectTeachInfoResp{
+  int64 classId = 1;
+  int64 subjectId = 2;
+  string subjectTitle = 3;
+  int64 memberId = 4;
+  string trueName = 5;
+}
+message ClassInfo{
+  int64 id = 1;
+  int64 stageId = 2;
+  int64 gradeId = 3;
+  string fullName = 4;
+  int64 orgId = 5;
+}
+
+message GradeInfo{
+  int64 id = 1;
+  string title = 2;
+}
+message ListGradeResp{
+  repeated GradeInfo list = 1;
+}
+
+message OrgIdReq {
+  int64 orgId = 1;
+}
+
+message ListByOrgIdResp {
+  repeated ClassInfo list = 1;
+}
+
+message StudentNumReq {
+  int64 classId = 1;
+  int64 studentNum = 2;
+}
+
+message NullResp {}
+
+service class {
+  // 获取班级信息详情
+  rpc GetClassInfoById(IdReq) returns(ClassInfo);
+  // 根据班级名称获取班级信息
+  rpc GetClassInfoByFullName(FullNameReq) returns(ClassInfo);
+// 获取机构下的班级列表
+  rpc ListByOrgId(OrgIdReq) returns(ListByOrgIdResp);
+// 获取机构下的学段列表
+  rpc ListGradeByOrgId(OrgIdReq) returns(ListGradeResp);
+// 获取学段列表
+  rpc ListGradesWithId(IdsReq) returns(ListGradeResp);
+// 获取学段信息
+  rpc FindGradeById(IdReq) returns(GradeInfo);
+// 改变班级人数
+  rpc ChangeStudentNum(StudentNumReq) returns(NullResp);
+// 根据班级Id,学科Id获取任课关系
+  rpc GetTeacherByClassIdAndSubjectId(ClassSubjectIdReq) returns(ClassSubjectTeachInfoResp);
+}

@@ -1,0 +1,18 @@
+syntax = "proto3";
+
+package device;
+
+option go_package = "device";
+
+message IdReq{
+  int64 id = 1;
+}
+
+message DeviceInfo{
+  int64 id = 1;
+  string title = 2;
+}
+
+service device {
+  rpc GetDeviceInfoById(IdReq) returns(DeviceInfo);
+}

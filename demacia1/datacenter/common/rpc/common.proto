@@ -1,0 +1,31 @@
+syntax = "proto3";
+
+package common;
+
+option go_package = "common";
+
+message HolidayReq{
+  int64 year = 1;
+}
+
+message AreaReq{
+  int64 areaId = 1;
+}
+
+message AreaResp{
+  int64 provinceId = 1;
+  int64 cityId = 2;
+  int64 areaId = 3;
+  string provinceTitle = 4;
+  string cityTitle = 5;
+  string areaTitle = 6;
+}
+
+message HolidayResp{
+  repeated string SpecialDate = 1;
+}
+
+service common {
+  rpc findAreaInfo(AreaReq) returns(AreaResp);
+  rpc findHolidayInfo (HolidayReq) returns (HolidayResp);
+}

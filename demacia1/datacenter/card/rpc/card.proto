@@ -1,0 +1,44 @@
+syntax = "proto3";
+
+package card;
+
+option go_package = "card";
+
+message AddReq{
+  int64 orgId = 1;
+  int64 objectId = 2;
+  repeated string cardNum = 3;
+}
+
+message ListReq{
+  int64 orgId = 1;
+  int64 objectId = 2;
+}
+
+message ListResp {
+  repeated string cardNum = 1;
+}
+
+message CheckReq{
+  int64 orgId = 1;
+  int64 objectId = 2;
+  string cardNum = 3;
+}
+
+message BoolResp {
+  bool Result = 1; // true：可用，false：不可用
+}
+
+service card {
+  rpc addTeacherCard(AddReq) returns(BoolResp);
+
+  rpc addStudentCard(AddReq) returns(BoolResp);
+
+  rpc getTeacherCardList(ListReq) returns(ListResp);
+
+  rpc getStudentCardList(ListReq) returns(ListResp);
+
+  rpc checkMember(CheckReq) returns(BoolResp);
+
+  rpc checkStudent(CheckReq) returns(BoolResp);
+}

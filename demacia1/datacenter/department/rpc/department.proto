@@ -1,0 +1,77 @@
+syntax = "proto3";
+
+package department;
+
+option go_package = "department";
+
+message DepartmentIdReq{
+  int64 departmentId = 1;
+}
+
+message DepartmentInfo{
+  int64 departmentId = 1;
+  int64 orgId = 2;
+  string departmentTitle = 3;
+  int64 sort = 4;
+  int64 memberCount = 5;
+}
+
+message OrgIdAndDepartmentTitleReq {
+  int64 orgId = 1;
+  string departmentTitle = 2;
+}
+
+message OrgIdReq{
+  int64 orgId = 1;
+}
+
+message OrgIdAndDepartmentIdReq{
+  int64 orgId = 1;
+  int64 departmentId = 2;
+}
+
+message OrgIdAndMemberIdReq{
+  int64 orgId = 1;
+  int64 memberId = 2;
+}
+
+message DepartmentListResp {
+  repeated DepartmentInfo departments = 1;
+}
+
+message MemberIdsResp {
+  repeated int64 memberIds = 1;
+}
+
+message DepartmentIdsResp {
+  repeated int64 departmentIds = 1;
+}
+
+message DepartmentMember{
+  int64 departmentId = 1;
+  int64 MemberId = 2;
+}
+
+message DepartmentMembersResp {
+  repeated DepartmentMember departmentMembers = 1;
+}
+
+service department {
+  // 根据id获取部门详情
+  rpc getDepartmentById(DepartmentIdReq) returns(DepartmentInfo);
+
+  // 根据机构ID和部门名称获取部门信息
+  rpc getDepartmentByOrgIdAndDepartmentTitle(OrgIdAndDepartmentTitleReq) returns(DepartmentInfo);
+
+  // 根据机构ID和部门ID获取部门下的人员ID列表
+  rpc getMemberIdsByOrgIdAndDepartmentId(OrgIdAndDepartmentIdReq) returns(MemberIdsResp);
+
+  // 根据机构ID和人员ID获取该人员所在的部门ID列表
+  rpc getDepartmentIdsByOrgIdAndMemberId(OrgIdAndMemberIdReq) returns(DepartmentIdsResp);
+
+  // 根据机构ID获取所有的部门
+  rpc getDepartmentsByOrgId(OrgIdReq) returns(DepartmentListResp);
+
+  // 根据机构ID获取所有的部门人员关系
+  rpc getDepartmentMemberRelationByOrgId(OrgIdReq) returns(DepartmentMembersResp);
+}
